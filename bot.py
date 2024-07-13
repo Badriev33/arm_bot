@@ -19,8 +19,8 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 #from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 
-CREDENTIALS_FILE = 'creds.json'
-spreadsheet_id = '1xYZIKaiM0bPjA-Qd-5geFTnvyA2t7M2wbxcm9tB4QWw'
+CREDENTIALS_FILE = ''
+spreadsheet_id = ''
 
 credentials = ServiceAccountCredentials.from_json_keyfile_name(
     CREDENTIALS_FILE,
@@ -36,7 +36,7 @@ service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
 # ).execute()
 # pprint(values)
 
-TOKEN = "7328590211:AAFu-1E7TK_8L43jTamVT2SJx6X3nyhQLNk"
+TOKEN = ""
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot)
