@@ -17,7 +17,6 @@ import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials 
 
-
 CREDENTIALS_FILE = 'creds.json'
 spreadsheet_id = '1xYZIKaiM0bPjA-Qd-5geFTnvyA2t7M2wbxcm9tB4QWw'
 
@@ -33,7 +32,6 @@ TOKEN = "7328590211:AAFu-1E7TK_8L43jTamVT2SJx6X3nyhQLNk"
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot=bot)
 
-
 current_step = None
 nickname = None
 style_music = None
@@ -43,7 +41,7 @@ kitchen_name = None
 kitchen_description = None
 kitchen_contact = None
 
-flag = True
+
 
 @dp.message_handler(commands=['start'])
 async def start_handler(message: types.Message):
@@ -66,47 +64,33 @@ async def start_handler(message: types.Message):
         keyboard=kb,
         resize_keyboard=True
     )
-    await message.reply(f"Привет, я WS-бот, который поможет тебе легко подать заявки на участие\nв ивенте от Witches Sabbath и получить самую важную инфу по ближайшему рейву!",reply_markup=keyboard, parse_mode='HTML')
+    await message.reply(f"Привет, я WS-бот, который поможет тебе легко подать заявки на участие в ивенте от\nWitches Sabbath и получить самую важную инфу по ближайшему рейву!",reply_markup=keyboard, parse_mode='HTML')
 
-# Обработка DJ
+
+#Обработка DJ
 @dp.message_handler(Text(equals='Заявка на DJ 🎧', ignore_case=True))
 async def process_start_application(message: types.Message):
-    global current_step, flag
+    global current_step
     current_step = 'waiting_for_nickname'
-    flag = False
-    await message.reply(f"ВАЖНО! Прежде чем оставить заявку\n внимательно прочти это сообщение.\nОтправление заявки не дает гарантии в участии.\nВсе кандидаы будут рассмотрены организаторами\nпосле составления основного лайн-апа.\nПреимущественные места за пультом выделяются\n для DJ саунд-систем организаторов.")
-    inline_kb = types.InlineKeyboardMarkup()
-    inline_kb.add(types.InlineKeyboardButton(text="Заполнить заявку", callback_data="start_dj_application"))
-    await message.answer("Нажмите кнопку ниже, чтобы начать заполнение заявки:", reply_markup=inline_kb)
+    await message.answer("Напиши свой никнейм")
 
-
-
-# @dp.message_handler(lambda message: current_step == 'waiting_for_nickname' and not flag)
-# async def process_nickname(message: types.Message):
-@dp.callback_query_handler(lambda c: c.data == 'start_dj_application')
-async def start_kitchen_application(callback_query: types.CallbackQuery):
-    global nickname, current_step, flag
-    current_step = 'waiting_for_dj_name'
-    #await message.answer("Напиши свой жанр")
-    await bot.send_message(callback_query.from_user.id, "Напиши свой никнейм")
-
-@dp.message_handler(lambda message: current_step == 'waiting_for_dj_name' and not flag)
-async def process_style_music(message: types.Message):
-    global nickname,style_music, current_step, flag
+@dp.message_handler(lambda message: current_step == 'waiting_for_nickname')
+async def process_nickname(message: types.Message):
+    global nickname, current_step
     nickname = message.text
     current_step = 'waiting_for_style_music'
     await message.answer("Напиши свой жанр")
 
-@dp.message_handler(lambda message: current_step == 'waiting_for_style_music' and not flag)
+@dp.message_handler(lambda message: current_step == 'waiting_for_style_music')
 async def process_style_music(message: types.Message):
-    global style_music, current_step, flag
+    global style_music, current_step
     style_music = message.text
     current_step = 'waiting_for_contact'
     await message.answer("Оставь контакт для связи (ник тг/ссылка на вк)")
 
-@dp.message_handler(lambda message: current_step == 'waiting_for_contact' and not flag)
+@dp.message_handler(lambda message: current_step == 'waiting_for_contact')
 async def process_contact(message: types.Message):
-    global nickname, style_music, current_step, flag
+    global nickname, style_music, current_step
     contact = message.text
     await bot.send_message(chat_id=1310388442, text=f"Никнейм: {nickname}\nЖанр: {style_music}\nКонтакт: {contact}")
     await message.reply("Спасибо за заявку, мы обязательно с вами свяжемся!")
@@ -122,15 +106,13 @@ async def process_contact(message: types.Message):
     current_step = None
     nickname = None
     style_music = None
-    flag = True
 
 
 # Обработка Кухни/Бара
 @dp.message_handler(Text(equals='Заявка на кухню/бар/рыночек 🌭🍻🎨', ignore_case=True))
 async def process_kitchen_application(message: types.Message):
-    global kitchen_current_step, flag
+    global kitchen_current_step
     kitchen_current_step = 'waiting_for_kitchen_name'
-    flag = False
     await message.answer("Привет! В 2024 году у нас абсолютно свободные условия для размещения\nкоммерческих участников на нашем мероприятии. Нам важно только знать, что вы не\nторгуете ничем запрещенным или тем, что не соответствует ценностям и формату\nмероприятия. Поэтому все заявки подлежат рассмотрению.\n\nМы будем очень рады видеть у себя на мероприятии бар, кухню, мастер-классы по\nдуховным практикам, продажу безделушек и тому подобное. Чем больше занятий - тем\nвсем веселее и приятнее.")
    
     inline_kb = types.InlineKeyboardMarkup()
@@ -139,31 +121,29 @@ async def process_kitchen_application(message: types.Message):
 
 @dp.callback_query_handler(lambda c: c.data == 'start_kitchen_application')
 async def start_kitchen_application(callback_query: types.CallbackQuery):
-    global kitchen_current_step, flag
+    global kitchen_current_step
     kitchen_current_step = 'waiting_for_kitchen_name'
-    flag = False
     await bot.send_message(callback_query.from_user.id, "Как к тебе обращаться?")
-    #reply_markup=types.ReplyKeyboardRemove()
 
-@dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_name' and not flag)
+@dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_name')
 async def process_kitchen_name(message: types.Message):
-    global kitchen_name, kitchen_current_step, flag
+    global kitchen_name, kitchen_current_step
     kitchen_name = message.text
     kitchen_current_step = 'waiting_for_kitchen_description'
     await message.answer("Что хочешь поставить?")
 
-@dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_description' and not flag)
+@dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_description')
 async def process_kitchen_description(message: types.Message):
-    global kitchen_description, kitchen_current_step, flag
+    global kitchen_description, kitchen_current_step
     kitchen_description = message.text
     kitchen_current_step = 'waiting_for_kitchen_contact'
     await message.answer("Оставь контакт для связи (ник тг/ссылка на вк)")
 
-@dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_contact' and not flag)
+@dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_contact')
 async def process_kitchen_contact(message: types.Message):
-    global kitchen_name, kitchen_description, kitchen_current_step, flag
+    global kitchen_name, kitchen_description, kitchen_current_step
     kitchen_contact = message.text
-    await bot.send_message(chat_id=1310388442, text=f"Имя участника: {kitchen_name}\nЧто хочет поставить: {kitchen_description}\nКонтакт: {kitchen_contact}")
+    await bot.send_message(chat_id=1310388442, text=f"Название заведения: {kitchen_name}\nОписание: {kitchen_description}\nКонтакт: {kitchen_contact}")
     await message.reply("Спасибо, что оставил заявку! Скоро свяжемся с тобой и обсудим детали.")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
@@ -178,33 +158,34 @@ async def process_kitchen_contact(message: types.Message):
     kitchen_name = None
     kitchen_description = None
     kitchen_contact = None
-    flag = True
 
 
 @dp.message_handler(Text(equals='Где туса? 🏝', ignore_case=True))
-async def process_location(message: types.Message):
+async def process_kitchen_application(message: types.Message):
+    global kitchen_name, kitchen_description, kitchen_current_step,kitchen_contact
+    kitchen_current_step = None
+    kitchen_name = None
+    kitchen_description = None
+    kitchen_contact = None
     channel_chat_id = '@ws_tes'
     message_id = 2
+    #await message.reply(message)
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
 @dp.message_handler(Text(equals='Когда туса? 🌚', ignore_case=True))
-async def process_date(message: types.Message):
+async def process_kitchen_application(message: types.Message):
     channel_chat_id = '@ws_tes'
     message_id = 2
+    #await message.reply(message)
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
 @dp.message_handler(Text(equals='Что мне взять с собой? ⛺️🦍', ignore_case=True))
-async def process_packing_list(message: types.Message):
+async def process_kitchen_application(message: types.Message):
     channel_chat_id = '@ws_tes'
     message_id = 2
+    #await message.reply(message)
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
-@dp.message_handler(Text(equals='Отправить нам донатик ❤️', ignore_case=True))
-async def process_donate(message: types.Message):
-     await message.reply(f"🚨 <b>ДОНАТ - НЕОТЪЕМЛЕМАЯ ЧАСТЬ FREE TEKNO!</b>\nДрузья, для нас очень важны ваши донаты.\nКаждая копейка идёт в организацию и на аренду\nгенератора, транспортировку и покупку топлива для него.\nОстальное будет поделено поровну между участвующими\nсаунд системами в качестве возмещения затрат.\n\n<b>Внести свой вклад в движение\nFREE TEKNO на карту:\n2202 2067 3243 0694\n7 (987) 432-03-28 Сбер\nСЕРГЕЙ АРТУРОВИЧ Б.</b>", parse_mode='HTML')
-    # channel_chat_id = '@ws_tes'
-    # message_id = 2
-    # await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
 if __name__ == '__main__':
     executor.start_polling(dp)
