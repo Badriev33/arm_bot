@@ -74,7 +74,7 @@ async def process_start_application(message: types.Message):
     global current_step, flag
     current_step = 'waiting_for_nickname'
     flag = False
-    await message.reply(f"ВАЖНО! Прежде чем оставить заявку\n внимательно прочти это сообщение.\nОтправление заявки не дает гарантии в участии.\nВсе кандидаы будут рассмотрены организаторами\nпосле составления основного лайн-апа.\nПреимущественные места за пультом выделяются\n для DJ саунд-систем организаторов.")
+    await message.reply(f"ВАЖНО! Прежде чем оставить заявку\n внимательно прочти это сообщение.\nОтправление заявки не дает гарантии в участии.\nВсе кандидаты будут рассмотрены организаторами\nпосле составления основного лайн-апа.\nПреимущественные места за пультом выделяются\n для DJ саунд-систем организаторов.")
     inline_kb = types.InlineKeyboardMarkup()
     inline_kb.add(types.InlineKeyboardButton(text="Заполнить заявку", callback_data="start_dj_application"))
     await message.answer("Нажмите кнопку ниже, чтобы начать заполнение заявки:", reply_markup=inline_kb)
@@ -183,20 +183,21 @@ async def process_kitchen_contact(message: types.Message):
 
 @dp.message_handler(Text(equals='Где туса? 🏝', ignore_case=True))
 async def process_location(message: types.Message):
-    channel_chat_id = '@ws_tes'
-    message_id = 2
+    channel_chat_id = -1001335969565
+    message_id = 269
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
 @dp.message_handler(Text(equals='Когда туса? 🌚', ignore_case=True))
 async def process_date(message: types.Message):
-    channel_chat_id = '@ws_tes'
-    message_id = 2
+    channel_chat_id = -1001335969565
+    message_id = 269
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
 @dp.message_handler(Text(equals='Что мне взять с собой? ⛺️🦍', ignore_case=True))
 async def process_packing_list(message: types.Message):
-    channel_chat_id = '@ws_tes'
-    message_id = 2
+    #channel_chat_id = '@ws_tes'
+    channel_chat_id = -1001335969565
+    message_id = 259
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
 @dp.message_handler(Text(equals='Отправить нам донатик ❤️', ignore_case=True))
