@@ -8,3 +8,4 @@ source .venv/bin/activate
 
 либы 
 pip install google-api-python-client oauth2client
+pip install requests
