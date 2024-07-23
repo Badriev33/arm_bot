@@ -114,15 +114,15 @@ async def process_contact(message: types.Message):
         return
     global nickname, style_music, current_step, flag
     contact = message.text
-    await bot.send_message(chat_id=271883858, text=f"Никнейм: {nickname}\nЖанр: {style_music}\nКонтакт: {contact}")
+    await bot.send_message(chat_id=1310388442, text=f"Никнейм: {nickname}\nЖанр: {style_music}\nКонтакт: {contact}\nchat_id: {message['from'].id}") #271883858 - Серж
     await message.reply("Спасибо за заявку, мы обязательно с вами свяжемся!")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
-        range="A:C",  # Указываем диапазон столбцов A, B, C
+        range="A:E",  # Указываем диапазон столбцов A, B, C
         valueInputOption="USER_ENTERED",
         body={
             "majorDimension": "ROWS",
-            "values": [[nickname, style_music, contact]]
+            "values": [[nickname, style_music, contact, message['from'].id, 'none']]
         }
     ).execute()
     current_step = None
@@ -175,15 +175,15 @@ async def process_kitchen_contact(message: types.Message):
         return
     global kitchen_name, kitchen_description, kitchen_current_step, flag
     kitchen_contact = message.text
-    await bot.send_message(chat_id=271883858, text=f"Имя участника: {kitchen_name}\nЧто хочет поставить: {kitchen_description}\nКонтакт: {kitchen_contact}")
+    await bot.send_message(chat_id=1310388442, text=f"Имя участника: {kitchen_name}\nЧто хочет поставить: {kitchen_description}\nКонтакт: {kitchen_contact}\nchat_id: {message['from'].id}")#271883858 - Серж
     await message.reply("Спасибо, что оставил заявку! Скоро свяжемся с тобой и обсудим детали.")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
-        range="kitchenRequests!A:C",  # Указываем вторую страницу и диапазон столбцов A, B, C
+        range="kitchenRequests!A:E",  # Указываем вторую страницу и диапазон столбцов A, B, C
         valueInputOption="USER_ENTERED",
         body={
             "majorDimension": "ROWS",
-            "values": [[kitchen_name, kitchen_description, kitchen_contact]]
+            "values": [[kitchen_name, kitchen_description, kitchen_contact, message['from'].id, 'none']]
         }
     ).execute()
     kitchen_current_step = None
