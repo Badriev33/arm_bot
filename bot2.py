@@ -43,6 +43,15 @@ kitchen_name = None
 kitchen_description = None
 kitchen_contact = None
 
+merch_step = None
+merch_name = None
+merch_size = None
+merch_color = None
+merch_contact = None
+
+
+
+
 flag = True
 
 @dp.message_handler(commands=['start'])
@@ -52,14 +61,17 @@ async def start_handler(message: types.Message):
             types.KeyboardButton(text="Заявка на DJ 🎧"),
             types.KeyboardButton(text="Заявка на кухню/бар/рыночек 🌭🍻🎨"),
         ],
+        # [
+        #      types.KeyboardButton(text="Когда туса? 🌚"),
+        #      types.KeyboardButton(text="Где туса? 🏝"),
+        # ],
         [
-             types.KeyboardButton(text="Когда туса? 🌚"),
-             types.KeyboardButton(text="Где туса? 🏝"),
-        ],
-        [
-            types.KeyboardButton(text="Что мне взять с собой? ⛺️🦍"),
+            # types.KeyboardButton(text="Что мне взять с собой? ⛺️🦍"),
             types.KeyboardButton(text="Отправить нам донатик ❤️"),
-        ]
+        ],
+        # [
+        #     types.KeyboardButton(text="Купить мерч 👕👚"),
+        # ]
     ]
 
     keyboard = types.ReplyKeyboardMarkup(
@@ -74,15 +86,11 @@ async def process_start_application(message: types.Message):
     global current_step, flag
     current_step = 'waiting_for_nickname'
     flag = False
-    await message.reply(f"ВАЖНО! Прежде чем оставить заявку\n внимательно прочти это сообщение.\nОтправление заявки не дает гарантии в участии.\nВсе кандидаты будут рассмотрены организаторами\nпосле составления основного лайн-апа.\nПреимущественные места за пультом выделяются\n для DJ саунд-систем организаторов.")
+    await message.reply(f"ВАЖНО! Прежде чем оставить заявку\nвнимательно прочти это сообщение.\n\nОтправление заявки не дает гарантии в участии.\nВсе кандидаты будут рассмотрены организаторами\nпосле составления основного лайн-апа.\nПреимущественные места за пультом выделяются\nдля DJ саунд-систем организаторов.\n\nP.S. Если ты играешь лёгкий жанр, то ты можешь обратиться к\nорганизатору чилл-зоны, чтобы встать на второй танцпол:\n@G_0_T_L")
     inline_kb = types.InlineKeyboardMarkup()
     inline_kb.add(types.InlineKeyboardButton(text="Заполнить заявку", callback_data="start_dj_application"))
     await message.answer("Нажмите кнопку ниже, чтобы начать заполнение заявки:", reply_markup=inline_kb)
 
-
-
-# @dp.message_handler(lambda message: current_step == 'waiting_for_nickname' and not flag)
-# async def process_nickname(message: types.Message):
 @dp.callback_query_handler(lambda c: c.data == 'start_dj_application')
 async def start_kitchen_application(callback_query: types.CallbackQuery):
     global nickname, current_step, flag
@@ -115,7 +123,7 @@ async def process_contact(message: types.Message):
     global nickname, style_music, current_step, flag
     contact = message.text
     await bot.send_message(chat_id=1310388442, text=f"Никнейм: {nickname}\nЖанр: {style_music}\nКонтакт: {contact}\nchat_id: {message['from'].id}") #271883858 - Серж
-    await message.reply("Спасибо за заявку, мы обязательно с вами свяжемся!")
+    await message.reply("Спасибо, что оставил заявку!\nНе выключай уведомления 😉\n16 августа ты получишь сообщение со списком участников\nв этом боте. Если ты не найдешь себя в списке,\nто не вешай нос и все равно приезжай с контроллером.\nБывает всякое, а освободившийся слот будет за тобой 🤘🏻")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
         range="A:E",  # Указываем диапазон столбцов A, B, C
@@ -137,7 +145,7 @@ async def process_kitchen_application(message: types.Message):
     global kitchen_current_step, flag
     kitchen_current_step = 'waiting_for_kitchen_name'
     flag = False
-    await message.answer("Привет! В 2024 году у нас абсолютно свободные условия для размещения\nкоммерческих участников на нашем мероприятии. Нам важно только знать, что вы не\nторгуете ничем запрещенным или тем, что не соответствует ценностям и формату\nмероприятия. Поэтому все заявки подлежат рассмотрению.\n\nМы будем очень рады видеть у себя на мероприятии бар, кухню, мастер-классы по\nдуховным практикам, продажу безделушек и тому подобное. Чем больше занятий - тем\nвсем веселее и приятнее.")
+    await message.answer("Привет! В 2024 году у нас абсолютно свободные условия для размещения\nкоммерческих участников на нашем мероприятии. Нам важно только знать, что вы не\nторгуете ничем запрещенным или тем, что не соответствует ценностям и формату\nмероприятия. Поэтому все заявки подлежат рассмотрению.\n\nМы будем очень рады видеть у себя на мероприятии бар, кухню, мастер-классы по\nдуховным практикам, продажу безделушек и тому подобное. Чем больше занятий - тем\nвсем веселее и приятнее.\nТы также можешь присоединиться как волонтёр,\n просто в пункте 2 - напиши 'Хочу волонтёрить'.")
    
     inline_kb = types.InlineKeyboardMarkup()
     inline_kb.add(types.InlineKeyboardButton(text="Заполнить заявку", callback_data="start_kitchen_application"))
@@ -158,7 +166,7 @@ async def process_kitchen_name(message: types.Message):
     global kitchen_name, kitchen_current_step, flag
     kitchen_name = message.text
     kitchen_current_step = 'waiting_for_kitchen_description'
-    await message.answer("Что хочешь поставить?")
+    await message.answer("Что хочешь поставить?/Хочу волонтерить")
 
 @dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_description' and not flag)
 async def process_kitchen_description(message: types.Message):
@@ -193,6 +201,82 @@ async def process_kitchen_contact(message: types.Message):
     flag = True
 
 
+#обработка мерча
+@dp.message_handler(Text(equals='Купить мерч 👕👚', ignore_case=True))  
+async def process_merch_application(message: types.Message):
+    global merch_step, flag
+    merch_step = 'waiting_for_merch_name'
+    flag = False
+    await message.reply(f"Оставь свой в telegram  для связи и напиши количество,\nразмер, и желаемый цвет. С тобой свяжутся и уточнят состав и\nналичие заказа.\n\nЧем раньше вами оставлена заявка, тем выше вероятность,\nчто желанный цвет и размер уже будет забронирован за вами.\nКоличество ограничено!»\n")
+    inline_kb = types.InlineKeyboardMarkup()
+    inline_kb.add(types.InlineKeyboardButton(text="Заполнить заявку", callback_data="start_merch_application"))
+    await message.answer("Нажмите кнопку ниже, чтобы начать заполнение заявки:", reply_markup=inline_kb)
+
+@dp.callback_query_handler(lambda c: c.data == 'start_merch_application')
+async def start_merch_application(callback_query: types.CallbackQuery):
+    global merch_step, flag
+    #flag = False
+    merch_step = 'waiting_for_merch_name'
+    await bot.send_message(callback_query.from_user.id, "Напиши своё имя")
+
+@dp.message_handler(lambda message: merch_step == 'waiting_for_merch_name' and not flag)
+async def process_name_merch(message: types.Message):
+    if await handle_menu_buttons(message):
+        return
+    global merch_name,style_music, merch_step, flag
+    merch_name = message.text
+    merch_step = 'waiting_for_size_merch'
+    await message.answer("Напиши свой размер")
+
+@dp.message_handler(lambda message: merch_step == 'waiting_for_size_merch' and not flag)
+async def process_merch_color(message: types.Message):
+    if await handle_menu_buttons(message):
+        return
+    global merch_size, merch_step
+    merch_size = message.text
+    merch_step = 'waiting_for_color_merch'
+    await message.answer("Напиши желаемый цвет")
+
+@dp.message_handler(lambda message: merch_step == 'waiting_for_color_merch' and not flag)
+async def process_merch_size(message: types.Message):
+    if await handle_menu_buttons(message):
+        return
+    global merch_size, merch_step, merch_color
+    merch_color = message.text
+    merch_step = 'waiting_for_contact_merch'
+    await message.answer("Напиши свой контакт для связи")
+
+@dp.message_handler(lambda message: merch_step == 'waiting_for_contact_merch' and not flag)
+async def process_merch_contact(message: types.Message):
+    if await handle_menu_buttons(message):
+        return
+    global merch_step, merch_name, merch_size, merch_color, merch_contact, flag
+    merch_contact = message.text
+    await bot.send_message(chat_id=1310388442, text=f"Имя : {merch_name}\nРазмер: {merch_size}\nЦвет: {merch_color}\nКонтакт: {merch_contact}")#271883858 - Серж
+    await message.reply("Спасибо, что оставил заявку! Скоро свяжемся с тобой и обсудим детали.")
+    values = service.spreadsheets().values().append(
+        spreadsheetId=spreadsheet_id,
+        range="merch!A:C",  # Указываем вторую страницу и диапазон столбцов A, B, C
+        valueInputOption="USER_ENTERED",
+        body={
+            "majorDimension": "ROWS",
+            "values": [[merch_name, merch_color, merch_size, merch_contact]]
+        }
+    ).execute()
+    merch_step = None
+    merch_name = None
+    merch_size = None
+    merch_color = None
+    merch_contact = None
+    flag = True
+
+
+
+
+    
+
+
+
 @dp.message_handler(Text(equals='Где туса? 🏝', ignore_case=True))
 async def process_location(message: types.Message):
     channel_chat_id = -1001335969565
@@ -221,7 +305,7 @@ async def process_donate(message: types.Message):
 
 
 async def handle_menu_buttons(message: types.Message) -> bool:
-    if message.text in ["Заявка на DJ 🎧", "Заявка на кухню/бар/рыночек 🌭🍻🎨", "Когда туса? 🌚", "Где туса? 🏝", "Что мне взять с собой? ⛺️🦍", "Отправить нам донатик ❤️"]:
+    if message.text in ["Заявка на DJ 🎧", "Заявка на кухню/бар/рыночек 🌭🍻🎨", "Когда туса? 🌚", "Где туса? 🏝", "Что мне взять с собой? ⛺️🦍", "Отправить нам донатик ❤️", "Купить мерч 👕👚"]:
         # Dispatch the corresponding handler
         if message.text == "Заявка на DJ 🎧":
             await process_start_dj_application(message)
@@ -235,6 +319,8 @@ async def handle_menu_buttons(message: types.Message) -> bool:
             await process_packing_list(message)
         elif message.text == "Отправить нам донатик ❤️":
             await process_donate(message)
+        elif message.text == "Купить мерч 👕👚":
+            await process_merch_application(message)
         return True
     return False
 
