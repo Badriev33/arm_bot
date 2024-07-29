@@ -122,7 +122,7 @@ async def process_contact(message: types.Message):
         return
     global nickname, style_music, current_step, flag
     contact = message.text
-    await bot.send_message(chat_id=1310388442, text=f"Никнейм: {nickname}\nЖанр: {style_music}\nКонтакт: {contact}\nchat_id: {message['from'].id}") #271883858 - Серж
+    await bot.send_message(chat_id=271883858, text=f"Никнейм: {nickname}\nЖанр: {style_music}\nКонтакт: {contact}\nchat_id: {message['from'].id}") #271883858 - Серж
     await message.reply("Спасибо, что оставил заявку! Не выключай уведомления 😉 16 августа ты получишь сообщение со списком участников в этом боте. Если ты не найдешь себя в списке, то не вешай нос и все равно приезжай с контроллером. Бывает всякое, а освободившийся слот будет за тобой 🤘🏻")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
@@ -252,7 +252,7 @@ async def process_merch_contact(message: types.Message):
         return
     global merch_step, merch_name, merch_size, merch_color, merch_contact, flag
     merch_contact = message.text
-    await bot.send_message(chat_id=1310388442, text=f"Имя : {merch_name}\nРазмер: {merch_size}\nЦвет: {merch_color}\nКонтакт: {merch_contact}")#271883858 - Серж
+    await bot.send_message(chat_id=271883858, text=f"Имя : {merch_name}\nРазмер: {merch_size}\nЦвет: {merch_color}\nКонтакт: {merch_contact}")#271883858 - Серж
     await message.reply("Спасибо, что оставил заявку! Скоро свяжемся с тобой и обсудим детали.")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
