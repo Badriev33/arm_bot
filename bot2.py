@@ -145,7 +145,7 @@ async def process_kitchen_application(message: types.Message):
     global kitchen_current_step, flag
     kitchen_current_step = 'waiting_for_kitchen_name'
     flag = False
-    await message.answer("Привет! В 2024 году у нас абсолютно свободные условия для размещения\nкоммерческих участников на нашем мероприятии. Нам важно только знать, что вы не\nторгуете ничем запрещенным или тем, что не соответствует ценностям и формату\nмероприятия. Поэтому все заявки подлежат рассмотрению.\n\nМы будем очень рады видеть у себя на мероприятии бар, кухню, мастер-классы по\nдуховным практикам, продажу безделушек и тому подобное. Чем больше занятий - тем\nвсем веселее и приятнее.\nТы также можешь присоединиться как волонтёр,\n просто в пункте 2 - напиши 'Хочу волонтёрить'.")
+    await message.answer("Привет! В 2024 году у нас абсолютно свободные условия для размещения коммерческих участников на нашем мероприятии. Нам важно только знать, что вы не торгуете ничем запрещенным или тем, что не соответствует ценностям и формату мероприятия. Поэтому все заявки подлежат рассмотрению.\n\nМы будем очень рады видеть у себя на мероприятии бар, кухню, мастер-классы по духовным практикам, продажу безделушек и тому подобное. Чем больше занятий - тем всем веселее и приятнее. Ты также можешь присоединиться как волонтёр, просто в пункте 2 - напиши 'Хочу волонтёрить'.")
    
     inline_kb = types.InlineKeyboardMarkup()
     inline_kb.add(types.InlineKeyboardButton(text="Заполнить заявку", callback_data="start_kitchen_application"))
@@ -166,7 +166,7 @@ async def process_kitchen_name(message: types.Message):
     global kitchen_name, kitchen_current_step, flag
     kitchen_name = message.text
     kitchen_current_step = 'waiting_for_kitchen_description'
-    await message.answer("Что хочешь поставить?/Хочу волонтерить")
+    await message.answer("Что хочешь поставить?/Хочу волонтёрить")
 
 @dp.message_handler(lambda message: kitchen_current_step == 'waiting_for_kitchen_description' and not flag)
 async def process_kitchen_description(message: types.Message):
@@ -183,7 +183,7 @@ async def process_kitchen_contact(message: types.Message):
         return
     global kitchen_name, kitchen_description, kitchen_current_step, flag
     kitchen_contact = message.text
-    await bot.send_message(chat_id=1310388442, text=f"Имя участника: {kitchen_name}\nЧто хочет поставить: {kitchen_description}\nКонтакт: {kitchen_contact}\nchat_id: {message['from'].id}")#271883858 - Серж
+    await bot.send_message(chat_id=271883858, text=f"Имя участника: {kitchen_name}\nЧто хочет поставить: {kitchen_description}\nКонтакт: {kitchen_contact}\nchat_id: {message['from'].id}")#271883858 - Серж
     await message.reply("Спасибо, что оставил заявку! Скоро свяжемся с тобой и обсудим детали.")
     values = service.spreadsheets().values().append(
         spreadsheetId=spreadsheet_id,
