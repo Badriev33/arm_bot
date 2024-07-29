@@ -61,10 +61,10 @@ async def start_handler(message: types.Message):
             types.KeyboardButton(text="Заявка на DJ 🎧"),
             types.KeyboardButton(text="Заявка на кухню/бар/рыночек 🌭🍻🎨"),
         ],
-        # [
-        #      types.KeyboardButton(text="Когда туса? 🌚"),
-        #      types.KeyboardButton(text="Где туса? 🏝"),
-        # ],
+        [
+             types.KeyboardButton(text="Когда туса? 🌚"),
+            #  types.KeyboardButton(text="Где туса? 🏝"),
+        ],
         [
             # types.KeyboardButton(text="Что мне взять с собой? ⛺️🦍"),
             types.KeyboardButton(text="Отправить нам донатик ❤️"),
