@@ -69,7 +69,7 @@ async def start_handler(message: types.Message):
 
     keyboard = types.ReplyKeyboardMarkup(
         keyboard=kb,
-        
+
         resize_keyboard=True
     )
     await message.reply(f"Привет, я WS-бот, который поможет тебе легко подать заявки на участие в ивенте от Witches Sabbath и получить самую важную инфу по ближайшему рейву!",reply_markup=keyboard, parse_mode='HTML')
@@ -205,6 +205,8 @@ async def start_merch_application(callback_query: types.CallbackQuery):
 
 @dp.message_handler(state=MerchForm.name)
 async def process_name_merch(message: types.Message, state: FSMContext):
+    if await handle_menu_buttons(message, state):
+        return
     async with state.proxy() as data:
         data['name'] = message.text
     await MerchForm.next()
@@ -212,6 +214,8 @@ async def process_name_merch(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=MerchForm.size)
 async def process_merch_color(message: types.Message, state: FSMContext):
+    if await handle_menu_buttons(message, state):
+        return
     async with state.proxy() as data:
         data['size'] = message.text
     await MerchForm.next()
@@ -219,6 +223,8 @@ async def process_merch_color(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=MerchForm.color)
 async def process_merch_size(message: types.Message, state: FSMContext):
+    if await handle_menu_buttons(message, state):
+        return
     async with state.proxy() as data:
         data['color'] = message.text
     await MerchForm.next()
@@ -226,6 +232,8 @@ async def process_merch_size(message: types.Message, state: FSMContext):
 
 @dp.message_handler(state=MerchForm.contact)
 async def process_merch_contact(message: types.Message, state: FSMContext):
+    if await handle_menu_buttons(message, state):
+        return
     async with state.proxy() as data:
         data['contact'] = message.text
         name = data['name']
