@@ -69,6 +69,7 @@ async def start_handler(message: types.Message):
 
     keyboard = types.ReplyKeyboardMarkup(
         keyboard=kb,
+        
         resize_keyboard=True
     )
     await message.reply(f"Привет, я WS-бот, который поможет тебе легко подать заявки на участие в ивенте от Witches Sabbath и получить самую важную инфу по ближайшему рейву!",reply_markup=keyboard, parse_mode='HTML')
