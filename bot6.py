@@ -190,7 +190,7 @@ async def process_kitchen_contact(message: types.Message, state: FSMContext):
 # Обработка мерча
 @dp.message_handler(Text(equals='Купить мерч 👕👚', ignore_case=True))
 async def process_merch_application(message: types.Message, state: FSMContext):
-    channel_chat_id = -1001335969565
+    channel_chat_id = -1335969565
     message_id = 295
     await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
