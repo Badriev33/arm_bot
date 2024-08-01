@@ -191,17 +191,8 @@ async def process_kitchen_contact(message: types.Message, state: FSMContext):
 @dp.message_handler(Text(equals='Купить мерч 👕👚', ignore_case=True))
 async def process_merch_application(message: types.Message, state: FSMContext):
     channel_chat_id = -1001335969565
-    #message_id = 294
-    message_ids = [294, 295]  # Предположим, что это идентификаторы сообщений с фотографиями
-
-    media_group = []
-
-    for msg_id in message_ids:
-        msg = await bot.forward_message(chat_id='@temp_chat_id', from_chat_id=channel_chat_id, message_id=msg_id)
-        if msg.photo:
-            media_group.append(types.InputMediaPhoto(media=msg.photo[-1].file_id))
-
-    await bot.send_media_group(chat_id=message.chat.id, media=media_group)
+    message_id = 294
+    await bot.forward_message(chat_id=message.chat.id, from_chat_id=channel_chat_id, message_id=message_id)
 
     await state.finish()
     await state.reset_data()
